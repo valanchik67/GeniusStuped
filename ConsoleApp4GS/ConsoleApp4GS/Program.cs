@@ -1,4 +1,4 @@
-﻿namespace fool
+﻿namespace hhh
 {
     internal class Programm
     {
