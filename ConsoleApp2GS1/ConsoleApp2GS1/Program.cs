@@ -8,33 +8,31 @@ namespace ConsoleApp2GS1
         static void Main(string[] args)
         {
             Console.WriteLine("Введите ваше фио:");
+            Console.WriteLine();
             string name = Console.ReadLine();
+            Console.WriteLine();
             string[] questions = { "Сколько будет 2 + 2 * 2?", "Бревно нужно распилить на 10 частей. Сколько надо сделать распилов?", "На двух руках 10 пальцев. Сколько пальцев на 5 руках?", "Укол делают каждые полчаса. Сколько нужно минут для трех уколов?", "5 свечей горело, две потухли. Сколько свечей осталось?" };
             int[] answers = { 6, 9, 25, 60, 2 };
             string repeat = "да";
             while (repeat == "да")
             {
                 int correctAnswersCount = PlayQuiz(questions, answers);
+                Console.WriteLine();
                 int procent = correctAnswersCount * 100 / questions.Length;
-                string diagnoz = Diagnoz(procent);
+                string diagnosis = UserDiagnosis(procent);
                 Console.WriteLine(name + " набрал: " + correctAnswersCount + " правильных ответов");
                 Console.WriteLine("Процент правильных ответов: " + procent + "%");
-                Console.WriteLine(name + " ваш диагноз: " + diagnoz);
-                File.AppendAllText("results.txt", name + ";" + correctAnswersCount + ";" + diagnoz + Environment.NewLine);
+                Console.WriteLine(name + ", ваш диагноз: " + diagnosis);
+                Console.WriteLine();
+                File.AppendAllText("results.txt", name + ";" + correctAnswersCount + ";" + diagnosis + Environment.NewLine);
                 Console.WriteLine();
                 Console.WriteLine("Результат сохранен");
-                ShowResults();
                 Console.WriteLine();
-                Console.WriteLine(name + ", хочешь пройти тест еще раз?)))");
-                Console.WriteLine("Введите да или нет");
-                repeat = Console.ReadLine();
-                while (repeat != "да" && repeat != "нет")
-                {
-                    Console.WriteLine("Пожалуйста, введите да или нет");
-                    repeat = Console.ReadLine();
-                }
+                ShowResults();
+                repeat = UserAnswer();
             }
             Console.WriteLine("Спасибо за прохождение нашего теста!)");
+
         }
         static int PlayQuiz(string[] questions, int[] answers)
         {
@@ -63,41 +61,45 @@ namespace ConsoleApp2GS1
                 }
                 if (userAnswer == answers[index])
                 {
+                    Console.WriteLine();
                     Console.WriteLine("Правильно!!!");
+                    Console.WriteLine();
                     correctAnswersCount++;
                 }
                 else
                 {
+                    Console.WriteLine();
                     Console.WriteLine("Неправильно((");
+                    Console.WriteLine();
                 }
             }
             return correctAnswersCount;
         }
-        static string Diagnoz(int procent)
+        static string UserDiagnosis(int procent)
         {
             if (procent == 100)
             {
-                return "ТЫ ГЕНИЙ";
+                return "ГЕНИЙ";
             }
             else if (procent >= 80)
             {
-                return "ТЫ ТАЛАНТ";
+                return "ТАЛАНТ";
             }
             else if (procent >= 60)
             {
-                return "ТЫ НОРМАЛЬНЫЙ";
+                return "НОРМАЛЬНЫЙ";
             }
             else if (procent >= 40)
             {
-                return "ТЫ ДУРАК";
+                return "ДУРАК";
             }
             else if (procent >= 20)
             {
-                return "ТЫ КРЕТИН";
+                return "КРЕТИН";
             }
             else
             {
-                return "ТЫ ИДИОТ";
+                return "ИДИОТ";
             }
         }
         static void ShowResults()
@@ -105,13 +107,28 @@ namespace ConsoleApp2GS1
             Console.WriteLine();
             Console.WriteLine("Все результаты");
             Console.WriteLine("ФИО".PadRight(20) + "Правильных ответов".PadRight(25) + "Диагноз");
-            Console.WriteLine("-------------------------------------------------------------------");
+            Console.WriteLine("-----------------------------------------------------");
             string[] res = File.ReadAllLines("results.txt");
             foreach (string result in res)
             {
                 string[] parts = result.Split(';');
                 Console.WriteLine(parts[0].PadRight(20) + parts[1].PadRight(25) + parts[2]);
             }
+        }
+        static string UserAnswer()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Хочешь пройти тест еще раз?)))");
+            Console.WriteLine();
+            Console.WriteLine("Введите да или нет");
+            Console.WriteLine();
+            string repeat = Console.ReadLine();
+            while (repeat != "да" && repeat != "нет")
+            {
+                Console.WriteLine("Пожалуйста, введите да или нет");
+                repeat = Console.ReadLine();
+            }
+            return repeat;
         }
     }
 }
